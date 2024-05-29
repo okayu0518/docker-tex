@@ -1,0 +1,57 @@
+# LaTeX build files
+*.aux
+*.bbl
+*.blg
+*.brf
+*.idx
+*.ilg
+*.ind
+*.lof
+*.log
+*.lot
+*.out
+*.toc
+*.acn
+*.acr
+*.alg
+*.dvi
+*.fdb_latexmk
+*.fls
+*.glg
+*.glo
+*.gls
+*.ist
+*.loa
+*.loq
+*.lot
+*.maf
+*.mtc
+*.mtc0
+*.nav
+*.nlo
+*.nls
+*.pdfsync
+*.run.xml
+*.snm
+*.synctex.gz
+*.vrb
+*.xdy
+
+# PDF files (optional: uncomment if you don't want to commit your PDFs)
+#*.pdf
+
+# Notes and other backup files
+*~ 
+*.bak
+*.backup
+
+# Editor-specific files
+# VS Code
+.vscode/
+
+# Mac OS
+.DS_Store
+
+# Windows
+Thumbs.db
+
