@@ -5,5 +5,6 @@ if [[ $# != $((1)) ]] ;then
 	exit 1
 fi
 
-latexmk -pdfdvi $1.tex
-rm -f $1.aux $1.dvi 
+latexmk  -pdfdvi $1.tex
+latexmk  -c
+rm $1.dvi
