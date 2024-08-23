@@ -1,9 +1,18 @@
 #!/bin/bash
 
-if [[ $# != $((1)) ]] ;then
-	echo "Usage $0 $1"
-	exit 1
+# ファイル名が与えられていない場合のエラーメッセージを修正
+if [[ $# -ne 1 ]] ; then
+    echo "Usage: $0 <filename_without_extension>"
+    exit 1
 fi
 
-latexmk -pdfdvi $1.tex
-rm -f $1.aux $1.dvi 
+# ファイル名の変数を設定
+filename=$1
+
+# LaTeXファイルをPDFに変換
+latexmk -pdfdvi "$filename.tex"
+
+# 一時ファイルを削除
+latexmk -c
+rm "$filename.dvi"
+
