@@ -10,8 +10,7 @@ RUN apt update &&\
 #	texlive-lang-cjk \
 #	texlive-fonts-recommended \
 #	xdvik-ja \
-	&& rm -rf /var/cache/apk/* \
-	&& mkdir /data
+	&& rm -rf /var/cache/apk/* 
 
 # latexmkrcファイルをコピー
 COPY latexmkrc /root/.latexmkrc

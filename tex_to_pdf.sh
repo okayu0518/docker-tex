@@ -1,18 +1,21 @@
 #!/bin/bash
 
-# ファイル名が与えられていない場合のエラーメッセージを修正
-if [[ $# -ne 1 ]] ; then
-    echo "Usage: $0 <filename_without_extension>"
-    exit 1
+if [[ $# != $((1)) ]] ;then
+	echo "Usage $0 <tex-file>"
+	exit 1
 fi
 
-# ファイル名の変数を設定
-filename=$1
+TEX_FILE=$1
+CONTAINER_NAME="tex-env"
 
-# LaTeXファイルをPDFに変換
-latexmk -pdfdvi "$filename.tex"
+# イメージが存在しない場合のみビルド
+if ! docker image inspect $CONTAINER_NAME >/dev/null 2>&1; then
+    echo "Building Docker image..."
+    docker build -t $CONTAINER_NAME .
+else
+    echo "Using existing Docker image..."
+fi
 
-# 一時ファイルを削除
-latexmk -c
-rm "$filename.dvi"
+# LaTeXファイルをコンパイル
+docker run --rm -v "$(pwd)":/data $CONTAINER_NAME sh -c "latexmk -pdf -interaction=nonstopmode $TEX_FILE && latexmk -c"
 
