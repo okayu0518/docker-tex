@@ -17,5 +17,7 @@ else
 fi
 
 # LaTeXファイルをコンパイル
-docker run --rm -v "$(pwd)":/data $CONTAINER_NAME sh -c "latexmk -pdf -interaction=nonstopmode $TEX_FILE && latexmk -c"
+docker run --rm -v "$(pwd)":/workspace $CONTAINER_NAME sh -c "latexmk -pdfdvi -interaction=nonstopmode $TEX_FILE \
+	&& latexmk -c \
+	&& rm *.bbl *.dvi" 
 

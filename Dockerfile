@@ -5,7 +5,9 @@ FROM debian:bullseye-slim
 RUN apt update &&\
 	apt install -y \
 	texlive-lang-japanese \
+	texlive-lang-english \
 	texlive-latex-extra \
+	texlive-fonts-extra \ 
 	latexmk \
 #	texlive-lang-cjk \
 #	texlive-fonts-recommended \
@@ -16,5 +18,5 @@ RUN apt update &&\
 COPY latexmkrc /root/.latexmkrc
 
 # コンテナ内で作業するディレクトリの設定
-WORKDIR /data
+WORKDIR /workspace
 
