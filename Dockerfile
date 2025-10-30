@@ -2,16 +2,16 @@
 FROM debian:bullseye-slim
 
 # TexLiveとその依存パッケージのインストール
-RUN apt update && \
-    apt install -y \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
     texlive-lang-japanese \
     texlive-latex-extra \
     texlive-fonts-recommended \
     texlive-fonts-extra \
     latexmk && \
+    kanji-config-updmap-sys auto && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/* && \
-    kanji-config-updmap-sys auto
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # latexmkrcファイルをコピー
 COPY latexmkrc /root/.latexmkrc

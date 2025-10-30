@@ -7,10 +7,10 @@ usage() {
 }
 
 # determine docker or podman
-if command -v podman >/dev/null 2>&1; then
-  DOCKER="podman"
-elif command -v docker >/dev/null 2>&1; then
+if command -v docker >/dev/null 2>&1; then
   DOCKER="docker"
+elif command -v podman >/dev/null 2>&1; then
+  DOCKER="podman"
 else
   echo "Error: neither docker nor podman found."
   exit 1
