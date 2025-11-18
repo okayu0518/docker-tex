@@ -1,37 +1,31 @@
-# docker-tex
+## docker-tex
 
-- ローカルを汚さないように，dockerコンテナでlatexをコンパイルする．
-# 使い方
-- `chmod +x tex_to_pdf.sh`で実行権限付与しておく．
-- Dockerfileがある場所に移動して，`docker build . -t tex-env`を実行すると，イメージがビルドされる．
-- `docker run --rm -v $(pwd):/data tex-env ./tex_to_pdf.sh main`で以下の処理を実行
-  - ビルドしたイメージ(tex-container)からコンテナを作成
-  - カレントディレクトリをコンテナの/dataにマウント
-  - `tex_to_pdf.sh`が`main.tex`からpdf作成
-  - 中間ファイル削除
-  - 処理が終わったコンテナの削除
+シンプルな `latexmk` 開発環境を Docker / Podman で包み、ローカル環境を汚さずに PDF を生成します。
 
-# Docker-based LaTeX Project
+## 前提
 
-This project provides a Dockerized environment to compile LaTeX files into PDFs using `latexmk`. It supports Japanese language documents and includes a script for easy compilation.
+- Docker もしくは Podman
+- bash
 
-## Project Structure
+## 使い方
 
-- **Dockerfile**: Defines the Docker image with all necessary LaTeX packages.
-- **latexmkrc**: Configuration file for `latexmk`.
-- **main.tex**: Sample LaTeX file.
-- **tex_to_pdf.sh**: Bash script for compiling LaTeX files into PDFs.
+1. リポジトリ直下で実行権限を付与  
+   `chmod +x tex_to_pdf.sh`
+2. 対象の TeX ファイルを指定して実行  
+   `./tex_to_pdf.sh main.tex`
 
-## Getting Started
+スクリプトは以下を自動で行います。
 
-### Prerequisites
+- Docker (優先) もしくは Podman を検出
+- `tex-env` イメージが無ければビルド
+- カレントディレクトリを `/workspace` にマウントして `latexmk` を実行
+- 成功時に中間ファイルをクリーンアップ
 
-- Docker installed on your machine.
+出力された PDF (`main.pdf` など) はホスト側の同ディレクトリに生成されます。
 
-### Building the Docker Image
+## プロジェクト構成
 
-Build the Docker image by running:
-
-```bash
-docker build -t tex-env .
-
+- `Dockerfile`: LaTeX 環境の定義
+- `latexmkrc`: `latexmk` 設定
+- `main.tex`: サンプル原稿
+- `tex_to_pdf.sh`: ビルドスクリプト (Docker / Podman 両対応)

@@ -1,48 +1,34 @@
 #!/bin/bash
+set -euo pipefail
 
-# usage function
 usage() {
   echo "Usage: $0 <tex-file>"
   exit 1
 }
 
-# determine docker or podman
-if command -v docker >/dev/null 2>&1; then
-  DOCKER="docker"
-elif command -v podman >/dev/null 2>&1; then
-  DOCKER="podman"
-else
-  echo "Error: neither docker nor podman found."
-  exit 1
-fi
-
-# build image
-build_image() {
-  echo "Building container image with $DOCKER..."
-  $DOCKER build -t $CONTAINER_NAME .
-}
-
-# compile tex
-compile_tex() {
-  $DOCKER run --rm -v "$(pwd)":/workspace $CONTAINER_NAME sh -c \
-    "latexmk -pdfdvi -f -interaction=nonstopmode $TEX_FILE; \
-   latexmk -c"
-}
-
-# check arguments
-if [[ $# -ne 1 ]]; then
-  usage
-fi
+[[ $# -eq 1 ]] || usage
 
 TEX_FILE=$1
 CONTAINER_NAME="tex-env"
 
-# check if image exists
-if ! $DOCKER image inspect $CONTAINER_NAME >/dev/null 2>&1; then
-  build_image
-else
-  echo "Using existing container image..."
+for cli in docker podman; do
+  if command -v "$cli" >/dev/null 2>&1; then
+    CONTAINER_CLI=$cli
+    break
+  fi
+done
+
+if [[ -z ${CONTAINER_CLI:-} ]]; then
+  echo "Error: neither docker nor podman was found on PATH." >&2
+  exit 1
 fi
 
-# compile
-compile_tex
+if ! "$CONTAINER_CLI" image inspect "$CONTAINER_NAME" >/dev/null 2>&1; then
+  echo "Building container image with $CONTAINER_CLI..."
+  "$CONTAINER_CLI" build -t "$CONTAINER_NAME" .
+fi
+
+"$CONTAINER_CLI" run --rm \
+  -v "$(pwd)":/workspace \
+  "$CONTAINER_NAME" \
+  sh -c "latexmk -pdfdvi -f -interaction=nonstopmode \"$TEX_FILE\" ; latexmk -c"
