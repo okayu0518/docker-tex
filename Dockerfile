@@ -7,7 +7,10 @@ RUN apt update && \
     texlive-lang-japanese \
     texlive-latex-base \
     texlive-latex-recommended \
+		texlive-latex-extra \
     texlive-fonts-recommended \
+		texlive-fonts-extra \
+		texlive-plain-generic \
     latexmk && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
