@@ -1,31 +1,71 @@
-## docker-tex
+# LaTeX Docker Template
 
-シンプルな `latexmk` 開発環境を Docker / Podman で包み、ローカル環境を汚さずに PDF を生成します。
+日本語・英語の両方を1つの `.tex` ファイルで執筆できる、公式 TeX Live イメージを使用した Docker / Podman 向け LaTeX テンプレートです。
 
-## 前提
+## 特徴
 
-- Docker もしくは Podman
-- bash
+- **公式イメージ `texlive/texlive:latest` を使用**:
+  - upLaTeX / pbibtex / dvipdfmx / mendex を標準搭載し、日本語・英語混在文書も同一エンジンでコンパイル可能
+- **パーミッション安全**:
+  - コンテナ実行時に `--user $(id -u):$(id -g)` を指定しているため、生成された PDF や中間ファイルが `root` 所有になりません
+- **オンデマンドなカスタマイズビルド**:
+  - 通常は公式イメージをそのまま使用。`Dockerfile` に `RUN` 命令などを追記した場合のみ、自動でローカルイメージをビルドして差分検知（`.image-hash`）
+- **SyncTeX 対応**:
+  - PDF 閲覧エディタとの相互ジャンプ用データ（`.synctex.gz`）を保持
+
+## ディレクトリ構成
+
+```text
+.
+├── Dockerfile        # パッケージ追加用の Dockerfile (通常は変更不要)
+├── latexmkrc         # latexmk の設定ファイル (upLaTeX + dvipdfmx)
+├── tex2pdf.sh        # コンパイル用スクリプト
+├── main.tex          # LaTeX 本文のテンプレート
+├── references.bib    # 参考文献 (BibTeX)
+├── figs/             # 画像格納ディレクトリ (.gitkeep)
+├── .dockerignore
+└── .gitignore
+```
 
 ## 使い方
 
-1. リポジトリ直下で実行権限を付与  
-   `chmod +x tex_to_pdf.sh`
-2. 対象の TeX ファイルを指定して実行  
-   `./tex_to_pdf.sh main.tex`
+### 1. テンプレートのコピー
 
-スクリプトは以下を自動で行います。
+```bash
+# latex-documents 直下で実行
+cp -r template/ <新しいプロジェクト名>/
+cd <新しいプロジェクト名>/
+```
 
-- Docker (優先) もしくは Podman を検出
-- `tex-env` イメージが無ければビルド
-- カレントディレクトリを `/workspace` にマウントして `latexmk` を実行
-- 成功時に中間ファイルをクリーンアップ
+### 2. コンパイル
 
-出力された PDF (`main.pdf` など) はホスト側の同ディレクトリに生成されます。
+```bash
+# 通常コンパイル (PDF生成 + 中間ファイルの自動クリーンアップ)
+./tex2pdf.sh main.tex
 
-## プロジェクト構成
+# watch モード (ファイルの保存を検知して自動再コンパイル、Ctrl+C で終了)
+./tex2pdf.sh -pvc main.tex
 
-- `Dockerfile`: LaTeX 環境の定義
-- `latexmkrc`: `latexmk` 設定
-- `main.tex`: サンプル原稿
-- `tex_to_pdf.sh`: ビルドスクリプト (Docker / Podman 両対応)
+# 中間ファイルを build/ ディレクトリに分離する場合
+./tex2pdf.sh -outdir=build main.tex
+
+# 中間ファイルのクリーンアップのみ実行
+./tex2pdf.sh -c main.tex
+```
+
+生成される PDF は `main.pdf`（指定した `.tex` ファイルと同じベース名）です。
+
+## カスタマイズ
+
+### パッケージの追加
+標準でほぼすべての主要パッケージが含まれていますが、追加が必要な場合は `Dockerfile` に追記してください。追記後は `./tex2pdf.sh` 実行時に自動でローカルイメージがビルドされます。
+
+```dockerfile
+FROM texlive/texlive:latest
+RUN tlmgr update --self && tlmgr install <パッケージ名>
+```
+
+## 必要要件
+
+- **Docker** または **Podman**
+  - WSL2 環境の場合、Docker Desktop の Settings → Resources → WSL integration で対象ディストリビューションを有効にするか、ディストリビューション内に Docker Engine / Podman をインストールしてください。

@@ -1,0 +1,13 @@
+# Docker build context (nothing is copied into the image; keep it light)
+.git
+*.pdf
+*.aux
+*.bbl
+*.blg
+*.dvi
+*.fdb_latexmk
+*.fls
+*.log
+*.synctex
+*.synctex.gz
+.image-hash

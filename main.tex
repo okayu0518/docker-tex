@@ -1,26 +1,65 @@
-\documentclass[a4paper, dvipdfmx]{jsarticle}
+\documentclass[uplatex,a4paper,11pt,dvipdfmx]{jsarticle}
+
 \usepackage{graphicx}
-\usepackage{float}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{cite}
+\usepackage{hyperref}
+\usepackage{array}
+\usepackage{tabularx}
 \usepackage{url}
 
-\title{\Large{hoge}}
-
-\author{
-	student ID:0518
-	okayu
-}
-
+\title{LaTeX テンプレート}
+\author{著者名}
 \date{\today}
-\institution{}
-
 
 \begin{document}
 \maketitle
 
+\begin{abstract}
+This is the abstract. 本テンプレートは up\LaTeX{} を使用しており、日本語と英語の両方を単一のファイル内で混在して執筆できます。
+\end{abstract}
 
-\section*{fugafuga}
-this is my repo \cite{okayu0518kut}
+\section{はじめに}
+本テンプレートは、日本語・英語混在の文書作成に対応しています。
+図（\texttt{figs/}）、表、数式、参考文献引用の基本構成を含んでいます。
 
-\bibliography{refs}
-\bibliographystyle{junsrt}
+\section{基本機能}
+
+\subsection{数式}
+\begin{equation}
+  E = mc^2
+\end{equation}
+
+\subsection{表（Table）}
+\begin{table}[htbp]
+  \centering
+  \caption{サンプルの表}
+  \label{tab:sample}
+  \begin{tabular}{llr}
+    \toprule
+    項目 & 説明 & 値 \\
+    \midrule
+    Item A & First parameter  & 10.5 \\
+    Item B & Second parameter & 20.0 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{図（Figure）}
+画像ファイルは \texttt{figs/} ディレクトリに配置して読み込みます。
+% \begin{figure}[htbp]
+%   \centering
+%   \includegraphics[width=0.7\linewidth]{figs/example.png}
+%   \caption{サンプルの図}
+%   \label{fig:sample}
+% \end{figure}
+
+\subsection{参考文献の引用}
+参考文献は \texttt{references.bib} に記述し、\texttt{\textbackslash cite} コマンドで引用します \cite{example2024}。
+
+\bibliographystyle{jplain}
+\bibliography{references}
+
 \end{document}
+

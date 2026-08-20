@@ -1,7 +1,7 @@
-# LaTeX compiler settings
+# LaTeX compiler settings (upLaTeX: supports both Japanese and English)
 $latex = 'uplatex -interaction=nonstopmode -synctex=1 %O %S';
 $bibtex = 'pbibtex %O %B';
-$dvipdf = 'dvipdfmx -f myfonts.map -o %D %S';
+$dvipdf = 'dvipdfmx -o %D %S';
 $makeindex = 'mendex %O -o %D %S';
 
 # PDF generation method (3 = compile DVI and convert to PDF)
@@ -14,5 +14,5 @@ $bibtex_use = 2;  # Run BibTeX when needed
 $max_repeat = 5;  # Maximum number of compilation passes
 $preview_mode = 0;  # Disable preview
 
-# Files to delete during cleanup
-$clean_ext = 'nav snm log aux dvi fls fdb_latexmx bbl blg synctex.gz';# LaTeX processing configuration
+# Files to delete during cleanup (keep synctex.gz for editor navigation)
+$clean_ext = 'nav snm log aux dvi fls fdb_latexmk bbl blg';

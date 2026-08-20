@@ -23,7 +23,6 @@
 *.ist
 *.loa
 *.loq
-*.lot
 *.maf
 *.mtc
 *.mtc0
@@ -33,25 +32,25 @@
 *.pdfsync
 *.run.xml
 *.snm
+*.synctex
 *.synctex.gz
 *.vrb
 *.xdy
+
+# Template-specific
+.image-hash
 
 # PDF files (optional: uncomment if you don't want to commit your PDFs)
 #*.pdf
 
 # Notes and other backup files
-*~ 
+*~
 *.bak
 *.backup
 
 # Editor-specific files
-# VS Code
 .vscode/
 
-# Mac OS
+# OS-specific files
 .DS_Store
-
-# Windows
 Thumbs.db
-
